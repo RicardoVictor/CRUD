@@ -1,0 +1,49 @@
+<h1 *ngIf="!isChange" mat-dialog-title>Create</h1>
+<h1 *ngIf="isChange" mat-dialog-title>Edit</h1>
+
+<div mat-dialog-content>
+  <mat-form-field appearance="fill">
+    <mat-label>Nome</mat-label>
+    <input matInput [(ngModel)]="data.nome" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>CPF</mat-label>
+    <input matInput [(ngModel)]="data.cpf" />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Idade</mat-label>
+    <input matInput [(ngModel)]="data.idade" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Cidades</mat-label>
+    <mat-select [(ngModel)]="data.idCidade" [formControl]="cidades">
+      <mat-select-trigger>
+        <span class="additional-selection">
+          {{ cidades.value }}
+        </span>
+      </mat-select-trigger>
+      <mat-option
+        *ngFor="let cidade of cidadeList"
+        [value]="cidade.id"
+      >
+        {{ cidade.nome }}/{{ cidade.uf }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button
+    mat-button
+    *ngIf="!isChange"
+    [mat-dialog-close]="data"
+    cdkFocusInitial
+  >
+    Create
+  </button>
+  <button mat-button *ngIf="isChange" [mat-dialog-close]="data" cdkFocusInitial>
+    Edit
+  </button>
+</div>
