@@ -11,9 +11,9 @@ namespace CRUD.Application.CidadeService.Service
 {
     public class CidadeService : BaseService<CidadeService>, ICidadeService
     {
-        private readonly CRUDContext _db;
+        private readonly Context _db;
 
-        public CidadeService(ILogger<CidadeService> logger, Infra.Data.CRUDContext db) : base(logger)
+        public CidadeService(ILogger<CidadeService> logger, Infra.Data.Context db) : base(logger)
         {
             _db = db;
         }

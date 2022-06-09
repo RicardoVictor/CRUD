@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ICidadeService, CidadeService>();
 builder.Services.AddScoped<IPessoaService, PessoaService>();
-builder.Services.AddDbContext<CRUDContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<Context>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddRouting(opt => opt.LowercaseUrls = true);
 
@@ -37,7 +37,7 @@ if (app.Environment.IsDevelopment())
 
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService<CRUDContext>();
+    var dataContext = scope.ServiceProvider.GetRequiredService<Context>();
     dataContext.Database.Migrate();
 }
 

@@ -11,9 +11,9 @@ namespace CRUD.Application.PessoaService.Service
 {
     public class PessoaService : BaseService<PessoaService>, IPessoaService
     {
-        private readonly CRUDContext _db;
+        private readonly Context _db;
 
-        public PessoaService(ILogger<PessoaService> logger, Infra.Data.CRUDContext db) : base(logger)
+        public PessoaService(ILogger<PessoaService> logger, Infra.Data.Context db) : base(logger)
         {
             _db = db;
         }
