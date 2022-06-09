@@ -10,12 +10,12 @@ namespace CRUD.Infra.Data
     /// Rererência de artigo para conseguir criar migration a partir de dominios
     /// https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/managing?tabs=dotnet-core-cli
     /// </summary>
-    public class CRUDContext : DbContext
+    public class Context : DbContext
     {
         public DbSet<Domain.CRUDAggregate.Cidade> Cidade { get; set; }
         public DbSet<Domain.CRUDAggregate.Pessoa> Pessoa { get; set; }
 
-        public CRUDContext(DbContextOptions options) : base(options)
+        public Context(DbContextOptions options) : base(options)
         {
         }
 
