@@ -36,13 +36,13 @@ namespace CRUD.Domain.CRUDAggregate
             int idCidade)
         {
             if (string.IsNullOrWhiteSpace(nome))
-                throw new ArgumentException("Invalid " + nameof(nome));
+                throw new ArgumentException(nameof(nome) + "não pode ser null ou vazio.");
 
             if (nome.Length > 300)
                 throw new ArgumentException(nameof(nome) + " deve ser menor ou igual a 300 caracteres.");
 
             if (string.IsNullOrWhiteSpace(cpf))
-                throw new ArgumentException("Invalid " + nameof(cpf));
+                throw new ArgumentException(nameof(cpf) + "não pode ser null ou vazio.");
                 
             if (cpf.Length > 11)
                 throw new ArgumentException(nameof(cpf) + " deve ser menor ou igual a 11 caracteres.");

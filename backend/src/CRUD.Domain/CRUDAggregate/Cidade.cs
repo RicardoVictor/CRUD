@@ -18,15 +18,17 @@ namespace CRUD.Domain.CRUDAggregate
         public int Id { get; set; }
         public string Nome { get; set; }
         public string UF { get; set; }
-        // public virtual ICollection<Pessoa> Pessoas { get; set; }
 
         public static Cidade Create(string nome, string uf)
         {
-            if (nome == null)
-                throw new ArgumentException("Invalid " + nameof(nome));
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException(nameof(nome) + "não pode ser null ou vazio.");
 
-            if (uf == null)
-                throw new ArgumentException("Invalid " + nameof(uf));
+            if (nome.Length > 200)
+                throw new ArgumentException(nameof(nome) + " deve ser menor ou igual a 200 caracteres.");
+
+            if (string.IsNullOrWhiteSpace(uf))
+                throw new ArgumentException(nameof(uf) + "não pode ser null ou vazio.");
 
             if (uf.Length > 2)
                 throw new InvalidUFExceptions();
@@ -36,14 +38,20 @@ namespace CRUD.Domain.CRUDAggregate
 
         public void Update(string nome, string uf)
         {
-            if (nome != null)
-                Nome = nome;
+            if (string.IsNullOrWhiteSpace(nome))
+                throw new ArgumentException(nameof(nome) + "não pode ser null ou vazio.");
+
+            if (nome.Length > 200)
+                throw new ArgumentException(nameof(nome) + " deve ser menor ou igual a 200 caracteres.");
+
+            if (string.IsNullOrWhiteSpace(uf))
+                throw new ArgumentException(nameof(uf) + "não pode ser null ou vazio.");
 
             if (uf.Length > 2)
                 throw new InvalidUFExceptions();
 
-            if (uf != null)
-                UF = uf;
+            Nome = nome;
+            UF = uf;
         }
     }
 }

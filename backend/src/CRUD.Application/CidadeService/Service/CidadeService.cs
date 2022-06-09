@@ -5,6 +5,7 @@ using CRUD.Application.CidadeService.Models.Response;
 using CRUD.Infra.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using CRUD.Application.CRUDAggregate;
 
 namespace CRUD.Application.CidadeService.Service
 {
@@ -28,12 +29,14 @@ namespace CRUD.Application.CidadeService.Service
 
         public async Task<GetByIdCidadeResponse> GetByIdAsync(int id)
         {
-
             var response = new GetByIdCidadeResponse();
 
             var entity = await _db.Cidade.FirstOrDefaultAsync(item => item.Id == id);
 
-            if (entity != null) response.Cidade = (CidadeDto)entity;
+            if (entity == null)
+                throw new NotFoundException("Cidade não encontrada para o id: " + id);
+
+            response.Cidade = (CidadeDto)entity;
 
             return response;
         }
@@ -75,14 +78,16 @@ namespace CRUD.Application.CidadeService.Service
 
         public async Task<DeleteCidadeResponse> DeleteAsync(int id)
         {
-
             var entity = await _db.Cidade.FirstOrDefaultAsync(item => item.Id == id);
 
-            if (entity != null)
-            {
-                _db.Remove(entity);
-                await _db.SaveChangesAsync();
-            }
+            if (entity == null)
+                throw new NotFoundException("Cidade não encontrada para o id: " + id);
+            
+            if(await _db.Pessoa.AnyAsync(p => p.Id_Cidade == id))
+                throw new ArgumentException("Cidade não pode ser deletada pois esta referenciada em Pessoa.");
+
+            _db.Remove(entity);
+            await _db.SaveChangesAsync();
 
             return new DeleteCidadeResponse();
         }
