@@ -30,12 +30,14 @@ namespace CRUD.Application.PessoaService.Service
 
         public async Task<GetByIdPessoaResponse> GetByIdAsync(int id)
         {
-
             var response = new GetByIdPessoaResponse();
 
             var entity = await _db.Pessoa.FirstOrDefaultAsync(item => item.Id == id);
 
-            if (entity != null) response.Pessoa = (PessoaDto)entity;
+            if (entity == null)
+                throw new NotFoundException("Pessoa não encontrada para o id: " + id);
+
+            response.Pessoa = (PessoaDto)entity;
 
             return response;
         }
@@ -48,7 +50,7 @@ namespace CRUD.Application.PessoaService.Service
             var cidade = await _db.Cidade.FirstOrDefaultAsync(c => c.Id == request.IdCidade);
 
             if (cidade == null)
-                throw new NotFoundException("Cidade not found for id: " + request.IdCidade);
+                throw new NotFoundException("Cidade não encontrada para o id: " + request.IdCidade);
 
             var newPessoa = Domain.CRUDAggregate.Pessoa.Create(request.Nome, request.CPF, request.Idade, request.IdCidade);
 
@@ -71,25 +73,39 @@ namespace CRUD.Application.PessoaService.Service
 
             var entity = await _db.Pessoa.FirstOrDefaultAsync(item => item.Id == id);
 
-            if (entity != null)
-            {
-                entity.Update(request.Nome, request.CPF, request.Idade, request.IdCidade);
-                await _db.SaveChangesAsync();
-            }
+            if (entity == null)
+                throw new NotFoundException("Pessoa não encontrada para o id: " + id);
 
-            return new UpdatePessoaResponse();
+            var cidade = await _db.Cidade.FirstOrDefaultAsync(c => c.Id == request.IdCidade);
+
+            if (cidade == null)
+                throw new NotFoundException("Cidade não encontrada para o id: " + request.IdCidade);
+
+            entity.Update(request.Nome, request.CPF, request.Idade, request.IdCidade);
+            await _db.SaveChangesAsync();
+
+            return new UpdatePessoaResponse()
+            {
+                Pessoa = new PessoaDto()
+                {
+                    Id = entity.Id,
+                    Nome = entity.Nome,
+                    CPF = entity.CPF,
+                    Idade = entity.Idade,
+                    Cidade = cidade
+                }
+            };
         }
 
         public async Task<DeletePessoaResponse> DeleteAsync(int id)
         {
-
             var entity = await _db.Pessoa.FirstOrDefaultAsync(item => item.Id == id);
 
-            if (entity != null)
-            {
-                _db.Remove(entity);
-                await _db.SaveChangesAsync();
-            }
+            if (entity == null)
+                throw new NotFoundException("Pessoa não encontrada para o id: " + id);
+
+            _db.Remove(entity);
+            await _db.SaveChangesAsync();
 
             return new DeletePessoaResponse();
         }
