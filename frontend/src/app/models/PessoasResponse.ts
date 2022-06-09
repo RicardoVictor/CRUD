@@ -1,7 +1,7 @@
-import { PessoaResponse } from "./PessoaResponse";
+import { Pessoa } from "./Pessoa";
 
 export interface PessoasResponse {
-  pessoas: PessoaResponse[],
+  pessoas: Pessoa[],
   success: boolean,
-  error: null
+  error: string | null
 }

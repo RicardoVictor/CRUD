@@ -1,9 +1,7 @@
-import { Cidade } from './Cidade';
+import { Pessoa } from "./Pessoa";
 
 export interface PessoaResponse {
-  id: number;
-  nome: string;
-  cpf: string;
-  idade: number;
-  cidade: Cidade;
+  pessoa: Pessoa,
+  success: boolean,
+  error: string | null
 }
