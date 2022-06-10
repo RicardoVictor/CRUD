@@ -61,11 +61,16 @@ export class HomeComponent implements OnInit {
               this.dataSource[index] = data.pessoa;
               this.table.renderRows();
             },
-            (error) =>
-              this.snackBar.open(
-                'Erro ao editar Pessoa: ' + error.error.error,
-                'Fechar'
-              )
+            (error) => {
+              if (typeof error.error.error == "undefined") {
+                this.snackBar.open('Erro ao editar Pessoa.', 'Fechar');
+              } else {
+                this.snackBar.open(
+                  'Erro ao editar Pessoa: ' + error.error.error,
+                  'Fechar'
+                );
+              }
+            }
           );
         } else {
           this.pesssoService.createElement(result).subscribe(
@@ -89,11 +94,16 @@ export class HomeComponent implements OnInit {
                   this.table.renderRows();
                 });
             },
-            (error) =>
-              this.snackBar.open(
-                'Erro ao criar Pessoa: ' + error.error.error,
-                'Fechar'
-              )
+            (error) => {
+              if (typeof error.error.error == "undefined") {
+                this.snackBar.open('Erro ao criar Pessoa.', 'Fechar');
+              } else {
+                this.snackBar.open(
+                  'Erro ao criar Pessoa: ' + error.error.error,
+                  'Fechar'
+                );
+              }
+            }
           );
         }
       }

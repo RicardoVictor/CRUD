@@ -4,15 +4,17 @@
 <div mat-dialog-content>
   <mat-form-field appearance="fill">
     <mat-label>Nome</mat-label>
-    <input matInput [(ngModel)]="data.nome" />
+    <input matInput [(ngModel)]="data.nome" required />
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>CPF</mat-label>
-    <input matInput [(ngModel)]="data.cpf" />
+    <input matInput [(ngModel)]="data.cpf" required />
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Idade</mat-label>
-    <input matInput [(ngModel)]="data.idade" />
+    <input matInput [(ngModel)]="data.idade" required />
   </mat-form-field>
 
   <mat-form-field appearance="fill">
@@ -23,10 +25,7 @@
           {{ cidades.value }}
         </span>
       </mat-select-trigger>
-      <mat-option
-        *ngFor="let cidade of cidadeList"
-        [value]="cidade.id"
-      >
+      <mat-option *ngFor="let cidade of cidadeList" [value]="cidade.id">
         {{ cidade.nome }}/{{ cidade.uf }}
       </mat-option>
     </mat-select>

@@ -40,4 +40,8 @@ export class DialogComponent implements OnInit {
       this.isChange = false;
     }
   }
+
+  getErrorMessage() {
+    return 'You must enter a value';
+  }
 }
