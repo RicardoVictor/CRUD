@@ -18,7 +18,7 @@ export class PessoaService {
   }
 
   createElement(element: PessoaRequest): Observable<PessoaRequest> {
-    return this.http.post<PessoaRequest>(this.apiUrl, element);
+    return this.http.post<PessoaRequest>(this.apiUrl, element)
   }
 
   editElement(element: PessoaRequest): Observable<PessoaResponse> {

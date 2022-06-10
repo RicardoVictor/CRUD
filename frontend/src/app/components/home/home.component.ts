@@ -10,6 +10,7 @@ import { CidadeService } from 'src/app/services/cidade.service';
 import { PessoaService } from 'src/app/services/pessoa.service';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PessoaResponse } from 'src/app/models/PessoaResponse';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +27,8 @@ export class HomeComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public pesssoService: PessoaService,
-    public cidadeService: CidadeService
+    public cidadeService: CidadeService,
+    private snackBar: MatSnackBar
   ) {
     this.pesssoService.getElements().subscribe((data: PessoasResponse) => {
       this.dataSource = data.pessoas;
@@ -51,34 +53,48 @@ export class HomeComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result !== undefined) {
         if (this.dataSource.map((p) => p.id).includes(result.id)) {
-          this.pesssoService
-            .editElement(result)
-            .subscribe((data: PessoaResponse) => {
-              const index = this.dataSource.findIndex((p) => p.id === data.pessoa.id);
+          this.pesssoService.editElement(result).subscribe(
+            (data: PessoaResponse) => {
+              const index = this.dataSource.findIndex(
+                (p) => p.id === data.pessoa.id
+              );
               this.dataSource[index] = data.pessoa;
               this.table.renderRows();
-            });
+            },
+            (error) =>
+              this.snackBar.open(
+                'Erro ao editar Pessoa: ' + error.error.error,
+                'Fechar'
+              )
+          );
         } else {
-          this.pesssoService.createElement(result).subscribe(() => {
-            this.cidadeService
-              .getElementById(result.idCidade)
-              .subscribe((cidadeResponse: CidadeResponse) => {
-                const cidade: Cidade = cidadeResponse.cidade;
-                const pessoa: Pessoa = {
-                  id: result.id,
-                  nome: result.nome,
-                  cpf: result.cpf,
-                  idade: result.idade,
-                  cidade: {
-                    id: cidade.id,
-                    nome: cidade.nome,
-                    uf: cidade.nome,
-                  },
-                };
-                this.dataSource.push(pessoa);
-                this.table.renderRows();
-              });
-          });
+          this.pesssoService.createElement(result).subscribe(
+            () => {
+              this.cidadeService
+                .getElementById(result.idCidade)
+                .subscribe((cidadeResponse: CidadeResponse) => {
+                  const cidade: Cidade = cidadeResponse.cidade;
+                  const pessoa: Pessoa = {
+                    id: result.id,
+                    nome: result.nome,
+                    cpf: result.cpf,
+                    idade: result.idade,
+                    cidade: {
+                      id: cidade.id,
+                      nome: cidade.nome,
+                      uf: cidade.nome,
+                    },
+                  };
+                  this.dataSource.push(pessoa);
+                  this.table.renderRows();
+                });
+            },
+            (error) =>
+              this.snackBar.open(
+                'Erro ao criar Pessoa: ' + error.error.error,
+                'Fechar'
+              )
+          );
         }
       }
     });
